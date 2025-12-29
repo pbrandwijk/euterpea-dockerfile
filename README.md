@@ -2,7 +2,28 @@
 
 Euterpea2 is a Haskell library that provides a framework for programming music. The library is currently not maintained, but if you want to do the exercises of the book Haskell School of Music, then you need some way to make it run. This Dockerfile aims to make that process easier, by setting all needed software up in a Docker container.
 
-## Building the container
+## Pulling the container from ghcr.io
+
+Pull the docker image from GHCR:
+
+```
+docker pull ghcr.io/pbrandwijk/euterpea-dockerfile:main
+```
+
+Go to the folder where you store your Haskell code for Euterpea and start the container with fluidsynth running in the background:
+
+```
+docker run -it --name euterpea -d --device /dev/snd --group-add audio -v ${PWD}:/home/haskell/src/ ghcr.io/pbrandwijk/euterpea-dockerfile:main fluidsynth /usr/share/sounds/sf2/FluidR3_GM.sf2
+```
+
+Now you can open a bash shell on the container and run GHCi inside it:
+
+```
+docker exec -it euterpea /bin/bash 
+```
+
+
+## Building the container locally
 
 ```
 docker build --no-cache --progress=plain -t haskell-euterpea .
@@ -12,7 +33,7 @@ docker build --no-cache --progress=plain -t haskell-euterpea .
 - Use `--progress=plain` to get a complete output of the console while building, which is helpful for debugging.
 
 
-## Running the docker container
+## Running the docker container from local build
 
 The container can be run in one go like so:
 
