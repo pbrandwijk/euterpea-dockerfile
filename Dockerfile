@@ -22,18 +22,10 @@ RUN apt-get update && \
   libglu1-mesa-dev \
   software-properties-common
 
-# Install Neovim
-RUN add-apt-repository -y ppa:neovim-ppa/stable && \
-  apt-get update && \
-  apt-get install -y neovim
-
 # Add a local user and switch to it
 RUN adduser haskell
 WORKDIR /home/haskell
 USER haskell
-
-# Install Atuin
-RUN curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
 
 # Install ghcup with the required version and settings
 ENV BOOTSTRAP_HASKELL_NONINTERACTIVE=1
@@ -58,12 +50,6 @@ RUN git clone https://github.com/Euterpea/Euterpea2.git && \
 RUN git clone https://github.com/Euterpea/HSoM.git && \
     cd HSoM/ && \
     cabal v1-install --allow-newer
-
-# Download and setup dotfiles
-RUN mkdir /home/haskell/.config
-RUN git clone https://github.com/pbrandwijk/dotfiles.git
-WORKDIR /home/haskell/dotfiles
-RUN ./create_symlinks.sh
 
 # Create a source folder for the code
 RUN mkdir /home/haskell/src
